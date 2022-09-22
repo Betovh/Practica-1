@@ -1,11 +1,7 @@
 #include <iostream>
 #include <stdio.h>
-#include <stdlib.h>
 #include <sstream>
-#include <conio.h>
-#include <string.h>
-#include <string>
-#include <cstring>  
+ 
 using namespace std;
 class Date {
 
