@@ -1,7 +1,7 @@
 #include <iostream>
 #include <stdio.h>
 #include <sstream>
- 
+
 using namespace std;
 class Date {
 
@@ -9,8 +9,58 @@ private:
 	int dia;
 	int mes;
 	int anio;
+
+
+	void AddDays(int DaysToAdd)
+	{
+		dia += DaysToAdd;
+		if (dia > 30) {
+
+			dia = 1;
+			AddMonths(1);
+		}
+
+		if (dia > 31)
+		{
+			dia = 1;
+			AddMonths(1);
+		}
+		if (mes == 2) {
+
+			if (dia > 29)
+			{
+				dia = 1;
+				AddMonths(1);
+			}
+		}
+
+	}
+
+	void AddMonths(int MonthsToAdd)
+	{
+		mes += MonthsToAdd;
+
+		if (mes > 12)
+		{
+			mes = 1;
+			AddYears(1);
+		}
+	}
+
+	void AddYears(int YearsToAdd)
+	{
+		anio += YearsToAdd;
+	}
+
 public:
+	
 	string date;
+	Date& operator ++ ();
+	
+	Date() {
+	
+	}
+
 	bool bisiesto;
 	void IsBisiesto(int);
 	void ValDiaFeb(int);
@@ -22,10 +72,26 @@ public:
 	void Run();
 
 	void setDate(int, int, int);
+
+
+	void getFecha();
 	int getDia();
 	int getMes();
 	int getAnio();
+
+
+	
+
 };
+
+Date & Date ::operator ++() {
+	AddDays(1);
+	return *this;
+}
+
+int num;
+
+
 
 // Constructores, Getters y Setters 
 void Date::setDate(int dia, int mes, int anio) {
@@ -42,6 +108,12 @@ int Date::getMes() {
 int Date::getAnio() {
 	return anio;
 }
+void Date::getFecha() {
+	cout << "\nproxima fecha: ";
+	cout << dia << "-" << mes << "-" << anio << endl;
+}
+
+
 
 //Método Validación Bisiesto
 void Date::IsBisiesto(int year) {
@@ -59,11 +131,12 @@ void Date::IsBisiesto(int year) {
 
 
 
+//Validaciones Año, Mes, Dia
 
 void Date::ValYear(int year) {
 	this->anio = year;
-	if (anio >= 1990 && anio <= 3000 || anio >= 1 && anio <= 99) {
-	
+	if (anio >= 1000 && anio <= 3000 || anio >= 1 && anio <= 99) {
+
 		ValMes(anio);
 	}
 
@@ -73,10 +146,11 @@ void Date::ValMes(int year) {
 
 	if (mes >= 1 && mes <= 12) {
 		ValMesFeb(anio);
-	
-	}else {
 
-			cout << "\nEl Mes NO es valido";
+	}
+	else {
+
+		cout << "\nEl Mes NO es valido";
 	}
 
 }
@@ -97,8 +171,9 @@ void Date::ValDiaFeb(int year) {
 	if (dia >= 1 && dia <= 29) {
 
 		IsBisiesto(anio);
-
+		
 	}
+	
 	else {
 		cout << "\nEl Dia NO es valido";
 
@@ -108,7 +183,7 @@ void Date::ValDiaFeb(int year) {
 
 void Date::ValDia(int year) {
 	this->anio = year;
-	
+
 
 	if (dia >= 1 && dia <= 31) {
 
@@ -119,13 +194,7 @@ void Date::ValDia(int year) {
 		cout << "\nEl Dia NO es valido";
 
 	}
-
-	
-
 }
-
-
-
 
 
 
@@ -133,6 +202,7 @@ void Date::ValDia(int year) {
 void Date::Run() {
 
 	string cadena;
+	
 	cout << "\nIngrese la fecha de esta manera (Dia-Mes-Year):  ";
 	cin >> cadena;
 	stringstream input_stringstream(cadena);
@@ -153,14 +223,19 @@ void Date::Run() {
 	mes = stoi(mes_);
 	anio = stoi(anio_);
 
-
-
+	cout << "\nIngrese el numero de fechas que quiere visualizar: ";
+	cin >> num;
 	ValYear(anio);
-
 
 }
 
 int main() {
-	Date fecha;
+	
+	Date fecha=Date();
+
 	fecha.Run();
+	for (int i = 0; i <num ;i++) {
+		++fecha;
+		fecha.getFecha();
+	}
 }
